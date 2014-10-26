@@ -1,5 +1,9 @@
 package com.trues.util;
 
+import com.googlecode.jcsv.CSVStrategy;
+import com.googlecode.jcsv.writer.CSVEntryConverter;
+import com.googlecode.jcsv.writer.CSVWriter;
+import com.googlecode.jcsv.writer.internal.CSVWriterBuilder;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDateTime;
@@ -11,6 +15,8 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
 import javax.sql.DataSource;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.Writer;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -408,11 +414,40 @@ public class TrueUtils {
         return sec;
     }
 
-    public static String[] getBeforeDate(String format) {
-        SimpleDateFormat df = new SimpleDateFormat(format);
+    public final static String dateFormat = "yyyyMMddHHmmss";
+
+    public static String[] getBeforeDate() {
+        SimpleDateFormat df = new SimpleDateFormat(dateFormat);
         LocalDateTime lc = new LocalDateTime();
         Date st = lc.minusDays(1).withTime(0, 0, 0, 0).toDate();
         Date et = lc.minusDays(1).withTime(23, 59, 59, 999).toDate();
         return new String[]{df.format(st), df.format(et)};
+    }
+
+
+
+    public static Date getDate(String source) throws ParseException {
+        if (source != null) {
+            SimpleDateFormat df = new SimpleDateFormat(dateFormat);
+            return df.parse(source);
+        }
+        return null;
+    }
+
+    public static CSVEntryConverter<String[]> defaultConverter() {
+        return new CSVEntryConverter<String[]>() {
+            @Override
+            public String[] convertEntry(String[] t) {
+                return t;
+            }
+        };
+    }
+
+    public static void export2Csv(File path,  List<String[]> results) throws IOException {
+        Writer out = new FileWriter(path);
+        CSVWriter<String[]> csvWriter = new CSVWriterBuilder<String[]>(out).strategy(CSVStrategy.UK_DEFAULT).entryConverter(TrueUtils.defaultConverter()).build();
+        csvWriter.writeAll(results);
+        csvWriter.flush();
+        TrueUtils.close(out);
     }
 }

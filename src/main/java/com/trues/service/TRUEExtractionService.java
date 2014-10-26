@@ -26,7 +26,7 @@ public class TRUEExtractionService {
     private static String DEFAULT_CONFIG_PATH = "data-extraction.xml";
     private static ExtractionService extractionService;
 
-    private final static String dateFormat = "yyyyMMddHHmmss";
+    public final static String dateFormat = "yyyyMMddHHmmss";
 
     private static Env activeEnv;
 
@@ -42,7 +42,7 @@ public class TRUEExtractionService {
                 endDate = args[1];
                 logger.info("reading params from stdin {} {}", startDate, endDate);
             } else {
-                String[] beforeDate = TrueUtils.getBeforeDate(dateFormat);
+                String[] beforeDate = TrueUtils.getBeforeDate();
                 startDate = beforeDate[0];
                 endDate = beforeDate[1];
                 logger.info("get default date {} {}", startDate, endDate);
