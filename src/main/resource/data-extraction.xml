@@ -4,7 +4,7 @@
             <dataSource>
                 <driver>oracle.jdbc.driver.OracleDriver</driver>
                 <url>jdbc:oracle:thin:@localhost:1521:XE</url>
-                <username>namo_school_kb_dev</username>
+                <username>AAEP</username>
                 <password>admin</password>
                 <connectionProperties>oracle.net.CONNECT_TIMEOUT=2000;oracle.jdbc.ReadTimeout=5000</connectionProperties>
                 <removeAbandoned>true</removeAbandoned>
@@ -19,25 +19,29 @@
                 <validationQuery>SELECT 1 from dual</validationQuery>
             </dataSource >
             <reports>
-                <report name="Email Report">
+                <!--<report name="Email Report">
                     <directory>D:\ICReports</directory>
                     <fileName>Email_#yyyymmdd#.csv</fileName>
-                    <!-- QueryType: "SQL","Procedure" -->
+                    &lt;!&ndash; QueryType: "SQL","Procedure" &ndash;&gt;
                     <queryType>SQL</queryType>
-                    <query>Select * from MODULE_BOARD_CONFIG</query>
+                    <query>Select * from MODULE_DAYSTUDY</query>
                 </report>
-                <!--<report name="Chat Report">
+                <report name="Chat Report">
                     <directory>D:\ICReports</directory>
-                    <fileName>Chat_[yyyymmdd].csv</fileName>
+                    <fileName>Chat_#yyyymmdd#.csv</fileName>
                     <queryType>SQL</queryType>
-                    <query>Select * from ccq.w_task_detail</query>
-                </report>
+                    <query>
+                        <![CDATA[
+                          Select * from MODULE_BOARD_CONFIG where reg_date >= :startDate and reg_date <= :endDate
+                        ]]>
+                    </query>
+                </report>-->
                 <report name="Agent Status">
                     <directory>D:\ICReports</directory>
                     <fileName>Agent_[yyyymmdd].csv</fileName>
-                    <queryType>SQL</queryType>
-                    <query>Select * from ccq.employee</query>
-                </report>-->
+                    <queryType>Procedure</queryType>
+                    <query>GET_ABC</query>
+                </report>
             </reports>
         </env>
         <env name="PRO">

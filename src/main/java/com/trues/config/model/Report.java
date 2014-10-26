@@ -1,6 +1,8 @@
 package com.trues.config.model;
 
 
+import org.apache.commons.lang.StringUtils;
+
 public class Report {
 
     private String name;
@@ -42,6 +44,9 @@ public class Report {
     }
 
     public String getQuery() {
+        if (StringUtils.isNotEmpty(query)) {
+            return query.trim();
+        }
         return query;
     }
 
