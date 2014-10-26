@@ -6,7 +6,6 @@ import com.googlecode.jcsv.writer.CSVWriter;
 import com.googlecode.jcsv.writer.internal.CSVWriterBuilder;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.lang.StringUtils;
-import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -418,9 +417,20 @@ public class TrueUtils {
 
     public static String[] getBeforeDate() {
         SimpleDateFormat df = new SimpleDateFormat(dateFormat);
-        LocalDateTime lc = new LocalDateTime();
-        Date st = lc.minusDays(1).withTime(0, 0, 0, 0).toDate();
-        Date et = lc.minusDays(1).withTime(23, 59, 59, 999).toDate();
+        Calendar nc = Calendar.getInstance();
+        nc.add(Calendar.DAY_OF_MONTH, -1);
+        nc.set(Calendar.HOUR_OF_DAY, 0);
+        nc.set(Calendar.MINUTE, 0);
+        nc.set(Calendar.SECOND, 0);
+        Date st = nc.getTime();
+
+        nc = Calendar.getInstance();
+        nc.add(Calendar.DAY_OF_MONTH, -1);
+        nc.set(Calendar.HOUR_OF_DAY, 23);
+        nc.set(Calendar.MINUTE, 59);
+        nc.set(Calendar.SECOND, 59);
+        Date et = nc.getTime();
+
         return new String[]{df.format(st), df.format(et)};
     }
 
