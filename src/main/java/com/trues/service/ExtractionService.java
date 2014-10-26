@@ -1,9 +1,5 @@
 package com.trues.service;
 
-import com.googlecode.jcsv.CSVStrategy;
-import com.googlecode.jcsv.writer.CSVEntryConverter;
-import com.googlecode.jcsv.writer.CSVWriter;
-import com.googlecode.jcsv.writer.internal.CSVWriterBuilder;
 import com.trues.config.model.Env;
 import com.trues.config.model.Report;
 import com.trues.util.TrueUtils;
@@ -15,13 +11,14 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: son.nguyen
@@ -43,23 +40,35 @@ public class ExtractionService {
         List<Report> reports = config.getReports();
         for (Report report : reports) {
             logger.info("extrac for report {} ", report.getName());
-            File folder = new File(report.getDirectory());
-            folder.mkdirs();
-
-            File file = new File(folder, "aa.csv");
-            if ("SQL".equals(report.getQueryType())) {
-                logger.info(" query type {} {}", report.getQueryType(), report.getQuery());
-                Map<String, Object> namedParams = new HashMap<String, Object>(2);
-                namedParams.put("startDate", TrueUtils.getDate(config.getStarDate()));
-                namedParams.put("endDate", TrueUtils.getDate(config.getEndDate()));
-                NamedParameterJdbcTemplate template = new NamedParameterJdbcTemplate(config.getJdbcTemplate());
-                List<String[]> results = template.query(report.getQuery(), namedParams, parseResult());
-                //write to csv
-
+            File checkFileName = checkFileName(report);
+            if (checkFileName != null) {
+                if ("SQL".equals(report.getQueryType())) {
+                    logger.info(" query type {} {}", report.getQueryType(), report.getQuery());
+                    Map<String, Object> namedParams = new HashMap<String, Object>(2);
+                    namedParams.put("startDate", TrueUtils.getDate(config.getStarDate()));
+                    namedParams.put("endDate", TrueUtils.getDate(config.getEndDate()));
+                    NamedParameterJdbcTemplate template = new NamedParameterJdbcTemplate(config.getJdbcTemplate());
+                    List<String[]> results = template.query(report.getQuery(), namedParams, parseResult());
+                    //write to csv
+                    TrueUtils.export2Csv(checkFileName, results);
+                }
+            } else {
+                logger.info(" file {} exits, so we ignore it  ", checkFileName.getName());
             }
-
         }
 
+    }
+
+    private File checkFileName(Report report) throws IOException {
+        File folder = new File(report.getDirectory());
+        FileUtils.forceMkdir(folder);
+        String fileName = report.getFileName();
+        fileName = fileName.replaceAll("#yyyymmdd#", config.getStarDate());
+        File file = new File(folder, fileName);
+        if (!file.exists()) {
+            return file;
+        }
+        return null;
     }
 
 

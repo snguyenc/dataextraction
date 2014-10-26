@@ -21,7 +21,7 @@
             <reports>
                 <report name="Email Report">
                     <directory>D:\ICReports</directory>
-                    <fileName>Email_[yyyymmdd].csv</fileName>
+                    <fileName>Email_#yyyymmdd#.csv</fileName>
                     <!-- QueryType: "SQL","Procedure" -->
                     <queryType>SQL</queryType>
                     <query>Select * from MODULE_BOARD_CONFIG</query>
