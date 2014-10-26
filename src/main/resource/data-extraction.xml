@@ -1,0 +1,86 @@
+<resources>
+    <environments active="DEV">
+        <env name="DEV">
+            <dataSource>
+                <driver>org.postgresql.Driver</driver>
+                <url>jdbc:postgresql://localhost:5432/configuration</url>
+                <username>hiringboss</username>
+                <password>hiringboss</password>
+                <removeAbandoned>true</removeAbandoned>
+                <removeAbandonedTimeout>300</removeAbandonedTimeout>
+                <maxActive>40</maxActive>
+                <maxIdle>1</maxIdle>
+                <maxWait>4000</maxWait>
+                <testWhileIdle>true</testWhileIdle>
+                <timeBetweenEvictionRunsMillis>30000</timeBetweenEvictionRunsMillis>
+                <minEvictableIdleTimeMillis>60000</minEvictableIdleTimeMillis>
+                <testOnBorrow>true</testOnBorrow>
+                <validationQuery>SELECT 1 from dual</validationQuery>
+            </dataSource >
+            <reports>
+                <report name="Email Report">
+                    <directory>D:\ICReports</directory>
+                    <fileName>Email_[yyyymmdd].csv</fileName>
+                    <!-- QueryType: "SQL","Procedure" -->
+                    <queryType>SQL</queryType>
+                    <query>Select * from configuration</query>
+                </report>
+                <report name="Chat Report">
+                    <directory>D:\ICReports</directory>
+                    <fileName>Chat_[yyyymmdd].csv</fileName>
+                    <queryType>SQL</queryType>
+                    <query>Select * from ccq.w_task_detail</query>
+                </report>
+                <report name="Agent Status">
+                    <directory>D:\ICReports</directory>
+                    <fileName>Agent_[yyyymmdd].csv</fileName>
+                    <queryType>SQL</queryType>
+                    <query>Select * from ccq.employee</query>
+                </report>
+            </reports>
+        </env>
+        <env name="UAT">
+            <dataSource>
+                <driver>oracle.jdbc.driver.OracleDriver</driver>
+                <url>jdbc:oracle:thin:@localhost:1521:XE</url>
+                <username>AAEP</username>
+                <password>admin</password>
+                <connectionProperties>oracle.net.CONNECT_TIMEOUT=2000;oracle.jdbc.ReadTimeout=5000</connectionProperties>
+                <removeAbandoned>true</removeAbandoned>
+                <removeAbandonedTimeout>300</removeAbandonedTimeout>
+                <maxActive>40</maxActive>
+                <maxIdle>1</maxIdle>
+                <maxWait>4000</maxWait>
+                <testWhileIdle>true</testWhileIdle>
+                <timeBetweenEvictionRunsMillis>30000</timeBetweenEvictionRunsMillis>
+                <minEvictableIdleTimeMillis>60000</minEvictableIdleTimeMillis>
+                <testOnBorrow>true</testOnBorrow>
+                <validationQuery>SELECT 1 from dual</validationQuery>
+            </dataSource >
+            <reports>
+                <report name="Email Report">
+                    <directory>D:\ICReports</directory>
+                    <fileName>Email_[yyyymmdd].csv</fileName>
+                    <!-- QueryType: "SQL","Procedure" -->
+                    <queryType>SQL</queryType>
+                    <query>Select * from ccq.qem_message</query>
+                </report>
+                <report name="Chat Report">
+                    <directory>D:\ICReports</directory>
+                    <fileName>Chat_[yyyymmdd].csv</fileName>
+                    <queryType>SQL</queryType>
+                    <query>Select * from ccq.w_task_detail</query>
+                </report>
+                <report name="Agent Status">
+                    <directory>D:\ICReports</directory>
+                    <fileName>Agent_[yyyymmdd].csv</fileName>
+                    <queryType>SQL</queryType>
+                    <query>Select * from ccq.employee</query>
+                </report>
+            </reports>
+        </env>
+        <env name="PRO">
+
+        </env>
+    </environments>
+</resources>
