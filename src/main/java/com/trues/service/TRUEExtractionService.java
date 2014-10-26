@@ -26,8 +26,6 @@ public class TRUEExtractionService {
     private static String DEFAULT_CONFIG_PATH = "data-extraction.xml";
     private static ExtractionService extractionService;
 
-    public final static String dateFormat = "yyyyMMddHHmmss";
-
     private static Env activeEnv;
 
 

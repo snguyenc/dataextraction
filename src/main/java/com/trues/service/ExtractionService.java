@@ -68,14 +68,16 @@ public class ExtractionService {
                                     String[] strings = {};
                                     ResultSetMetaData metaData = rs.getMetaData();
                                     int columnCount = metaData.getColumnCount();
-                                    List<String> ts = new ArrayList<String>(columnCount);
-                                    if (rowNum == 1) {
+                                    List<String> ts;
+                                    if (rowNum == 0) {
+                                        ts = new ArrayList<String>(columnCount);
                                         for (int i = 1; i <= columnCount; i++) {
                                             logger.info("colums: {}", metaData.getColumnName(i));
                                             ts.add(metaData.getColumnName(i));
                                         }
                                         results.add(ts.toArray(strings));
                                     }
+                                    ts = new ArrayList<String>(columnCount);
                                     for (int i = 1; i <= columnCount; i++) {
                                         if (rs.getObject(i) != null) {
                                             String data = rs.getObject(i).toString();

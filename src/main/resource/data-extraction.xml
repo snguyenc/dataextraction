@@ -19,12 +19,12 @@
                 <validationQuery>SELECT 1 from dual</validationQuery>
             </dataSource >
             <reports>
-                <!--<report name="Email Report">
+                <report name="Email Report">
                     <directory>D:\ICReports</directory>
                     <fileName>Email_#yyyymmdd#.csv</fileName>
-                    &lt;!&ndash; QueryType: "SQL","Procedure" &ndash;&gt;
+                    <!-- QueryType: "SQL","Procedure" -->
                     <queryType>SQL</queryType>
-                    <query>Select * from MODULE_DAYSTUDY</query>
+                    <query>Select * from AIS_PACKAGE_POSTPAID</query>
                 </report>
                 <report name="Chat Report">
                     <directory>D:\ICReports</directory>
@@ -32,13 +32,13 @@
                     <queryType>SQL</queryType>
                     <query>
                         <![CDATA[
-                          Select * from MODULE_BOARD_CONFIG where reg_date >= :startDate and reg_date <= :endDate
+                          Select * from AIS_PACKAGE_RECOMMEND where DATE_UPDATE >= :startDate and DATE_UPDATE <= :endDate
                         ]]>
                     </query>
-                </report>-->
+                </report>
                 <report name="Agent Status">
                     <directory>D:\ICReports</directory>
-                    <fileName>Agent_[yyyymmdd].csv</fileName>
+                    <fileName>Agent_#yyyymmdd#.csv</fileName>
                     <queryType>Procedure</queryType>
                     <query>GET_ABC</query>
                 </report>
