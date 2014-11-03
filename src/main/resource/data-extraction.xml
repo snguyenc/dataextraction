@@ -26,7 +26,7 @@
                     <queryType>SQL</queryType>
                     <query>Select * from AIS_PACKAGE_POSTPAID</query>
                 </report>
-                <report name="Chat Report">
+                <!--<report name="Chat Report">
                     <directory>D:\ICReports</directory>
                     <fileName>Chat_#yyyymmdd#.csv</fileName>
                     <queryType>SQL</queryType>
@@ -41,7 +41,7 @@
                     <fileName>Agent_#yyyymmdd#.csv</fileName>
                     <queryType>Procedure</queryType>
                     <query>GET_ABC</query>
-                </report>
+                </report>-->
             </reports>
         </env>
         <env name="PRO">

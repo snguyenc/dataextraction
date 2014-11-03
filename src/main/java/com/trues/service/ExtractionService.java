@@ -83,7 +83,7 @@ public class ExtractionService {
                                             String data = rs.getObject(i).toString();
                                             ts.add(data);
                                         } else {
-                                            ts.add("null");
+                                            ts.add("");
                                         }
                                     }
                                     results.add(ts.toArray(strings));
@@ -97,7 +97,7 @@ public class ExtractionService {
                     TrueUtils.export2Csv(checkFileName, results);
                 }
             } else {
-                logger.info(" file {} exits, so we ignore it  ", config.getStarDate());
+                logger.info(" file {} exits, so we ignore it  ", config.getSubStarDate());
             }
             logger.info(" ---------- done extrac for report {} ----------------", report.getName());
         }
@@ -110,7 +110,7 @@ public class ExtractionService {
         File folder = new File(report.getDirectory());
         FileUtils.forceMkdir(folder);
         String fileName = report.getFileName();
-        fileName = fileName.replaceAll("#yyyymmdd#", config.getStarDate());
+        fileName = fileName.replaceAll("#yyyymmdd#", config.getSubStarDate());
         File file = new File(folder, fileName);
         if (!file.exists()) {
             return file;
@@ -144,7 +144,7 @@ public class ExtractionService {
                             String data = rs.getObject(i).toString();
                             ts.add(data);
                         } else {
-                            ts.add("null");
+                            ts.add("");
                         }
                     }
                     results.add(ts.toArray(strings));

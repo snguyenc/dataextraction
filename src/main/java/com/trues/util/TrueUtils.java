@@ -455,7 +455,8 @@ public class TrueUtils {
 
     public static void export2Csv(File path,  List<String[]> results) throws IOException {
         Writer out = new FileWriter(path);
-        CSVWriter<String[]> csvWriter = new CSVWriterBuilder<String[]>(out).strategy(CSVStrategy.UK_DEFAULT).entryConverter(TrueUtils.defaultConverter()).build();
+        CSVWriter<String[]> csvWriter = new CSVWriterBuilder<String[]>(out).strategy(CSVStrategy.UK_DEFAULT).entryConverter(TrueUtils.defaultConverter())
+                .columnJoiner(new TrueCSVColumnJoinerImpl()).build();
         csvWriter.writeAll(results);
         csvWriter.flush();
         TrueUtils.close(out);

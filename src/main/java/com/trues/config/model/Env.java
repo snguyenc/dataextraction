@@ -35,6 +35,10 @@ public class Env {
         return starDate;
     }
 
+    public String getSubStarDate() {
+        return starDate.substring(0, 8);
+    }
+
     public void setStarDate(String starDate) {
         this.starDate = starDate;
     }
