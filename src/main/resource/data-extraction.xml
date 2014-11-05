@@ -20,7 +20,7 @@
             </dataSource >
             <reports>
                 <report name="Email Report">
-                    <directory>D:\ICReports</directory>
+                    <directory>C:\ICReports</directory>
                     <fileName>Email_#yyyymmdd#.csv</fileName>
                     <!-- QueryType: "SQL","Procedure" -->
                     <queryType>SQL</queryType>

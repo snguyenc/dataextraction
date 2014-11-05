@@ -2,7 +2,7 @@ package com.trues.config;
 
 
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.StaxDriver;
+import com.thoughtworks.xstream.io.xml.Xpp3Driver;
 import com.trues.config.model.*;
 import org.xml.sax.SAXException;
 
@@ -17,7 +17,7 @@ public class ServiceConfig {
 
     public static Environments parse(InputStream inputStream) throws IOException, SAXException {
 
-        XStream xstream = new XStream(new StaxDriver());
+        XStream xstream = new XStream(new Xpp3Driver());
         xstream.ignoreUnknownElements();
         xstream.alias("resources", Resources.class);
         xstream.alias("environments", Environments.class);
