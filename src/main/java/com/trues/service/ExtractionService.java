@@ -1,9 +1,11 @@
 package com.trues.service;
 
+import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.MimeUtility;
 import com.trues.config.model.Env;
 import com.trues.config.model.Report;
 import com.trues.util.TrueUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -16,6 +18,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -46,13 +49,24 @@ public class ExtractionService {
             logger.info(" ---------- extrac for report {} ----------------", report.getName());
             File checkFileName = checkFileName(report);
             if (checkFileName != null) {
+                //create decode column
+                String decode = report.getDecode();
+                final Map<String, String> decodeColumn = new HashMap<String, String>();
+                if (StringUtils.isNotEmpty(decode)) {
+                    String[] strings = decode.split(",");
+                    for (String string : strings) {
+                        if (StringUtils.isNotEmpty(string)) {
+                            decodeColumn.put(string, string);
+                        }
+                    }
+                }
                 logger.info(" query type {} {}", report.getQueryType(), report.getQuery());
                 if ("SQL".equals(report.getQueryType())) {
                     Map<String, Object> namedParams = new HashMap<String, Object>(2);
                     namedParams.put("startDate", TrueUtils.getDate(config.getStarDate()));
                     namedParams.put("endDate", TrueUtils.getDate(config.getEndDate()));
                     NamedParameterJdbcTemplate template = new NamedParameterJdbcTemplate(config.getJdbcTemplate());
-                    List<String[]> results = template.query(report.getQuery(), namedParams, parseResult());
+                    List<String[]> results = template.query(report.getQuery(), namedParams, parseResult(decodeColumn));
                     //write to csv
                     TrueUtils.export2Csv(checkFileName, results);
                 } else {
@@ -69,18 +83,26 @@ public class ExtractionService {
                                     ResultSetMetaData metaData = rs.getMetaData();
                                     int columnCount = metaData.getColumnCount();
                                     List<String> ts;
+                                    List<String> header = new ArrayList<String>(columnCount);
                                     if (rowNum == 0) {
-                                        ts = new ArrayList<String>(columnCount);
                                         for (int i = 1; i <= columnCount; i++) {
                                             logger.info("colums: {}", metaData.getColumnName(i));
-                                            ts.add(metaData.getColumnName(i));
+                                            header.add(metaData.getColumnName(i));
                                         }
-                                        results.add(ts.toArray(strings));
+                                        results.add(header.toArray(strings));
                                     }
                                     ts = new ArrayList<String>(columnCount);
                                     for (int i = 1; i <= columnCount; i++) {
                                         if (rs.getObject(i) != null) {
-                                            String data = rs.getObject(i).toString();
+                                            String data = rs.getString(i);
+                                            String isDecode = decodeColumn.get(header.get(i-1));
+                                            if (StringUtils.isNotEmpty(isDecode)) {
+                                                try {
+                                                    data = MimeUtility.decodeText(data);
+                                                } catch (UnsupportedEncodingException e) {
+                                                    logger.error("", e);
+                                                }
+                                            }
                                             ts.add(data);
                                         } else {
                                             ts.add("");
@@ -118,7 +140,7 @@ public class ExtractionService {
         return null;
     }
 
-    private ResultSetExtractor<List<String[]>> parseResult() {
+    private ResultSetExtractor<List<String[]>> parseResult(final Map<String, String> decodeColumn) {
         return new ResultSetExtractor<List<String[]>>() {
 
             @Override
@@ -129,19 +151,28 @@ public class ExtractionService {
                 ResultSetMetaData metaData = rs.getMetaData();
                 int columnCount = metaData.getColumnCount();
 
-                List<String> ts = new ArrayList<String>(columnCount);
+
+                List<String> header = new ArrayList<String>(columnCount);
                 for (int i = 1; i <= columnCount; i++) {
                     logger.info("colums: {}", metaData.getColumnName(i));
-                    ts.add(metaData.getColumnName(i));
+                    header.add(metaData.getColumnName(i));
                 }
-                results.add(ts.toArray(strings));
-
+                results.add(header.toArray(strings));
+                List<String> ts;
                 //get content
                 while(rs.next()){
                     ts = new ArrayList<String>(columnCount);
                     for (int i = 1; i <= columnCount; i++) {
                         if (rs.getObject(i) != null) {
-                            String data = rs.getObject(i).toString();
+                            String data = rs.getString(i);
+                            String isDecode = decodeColumn.get(header.get(i-1));
+                            if (StringUtils.isNotEmpty(isDecode)) {
+                                try {
+                                    data = MimeUtility.decodeText(data);
+                                } catch (UnsupportedEncodingException e) {
+                                   logger.error("", e);
+                                }
+                            }
                             ts.add(data);
                         } else {
                             ts.add("");

@@ -10,6 +10,15 @@ public class Report {
     private String fileName;
     private String queryType;
     private String query;
+    private String decode;
+
+    public String getDecode() {
+        return decode;
+    }
+
+    public void setDecode(String decode) {
+        this.decode = decode;
+    }
 
     public String getName() {
         return name;

@@ -2,11 +2,11 @@
     <environments active="UAT">
         <env name="UAT">
             <dataSource>
-                <driver>oracle.jdbc.driver.OracleDriver</driver>
-                <url>jdbc:oracle:thin:@localhost:1521:XE</url>
-                <username>AAEP</username>
-                <password>admin</password>
-                <connectionProperties>oracle.net.CONNECT_TIMEOUT=2000;oracle.jdbc.ReadTimeout=5000</connectionProperties>
+                <driver>org.postgresql.Driver</driver>
+                <url>jdbc:postgresql://localhost:5432/configuration</url>
+                <username>hiringboss</username>
+                <password>hiringboss</password>
+                <connectionProperties></connectionProperties>
                 <removeAbandoned>true</removeAbandoned>
                 <removeAbandonedTimeout>300</removeAbandonedTimeout>
                 <maxActive>40</maxActive>
@@ -24,7 +24,8 @@
                     <fileName>Email_#yyyymmdd#.csv</fileName>
                     <!-- QueryType: "SQL","Procedure" -->
                     <queryType>SQL</queryType>
-                    <query>Select * from AIS_PACKAGE_POSTPAID</query>
+                    <query>Select * from account</query>
+                    <decode>account_name,status</decode>
                 </report>
                 <!--<report name="Chat Report">
                     <directory>D:\ICReports</directory>
