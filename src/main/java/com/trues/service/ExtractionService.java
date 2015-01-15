@@ -102,6 +102,9 @@ public class ExtractionService {
                                             if (StringUtils.isNotEmpty(isDecode)) {
                                                 try {
                                                     data = MimeUtility.decodeText(data);
+                                                    if (StringUtils.isNotEmpty(data)) {
+                                                        data = data.replaceAll("\\r|\\n", " ");
+                                                    }
                                                     //logger.info(" --------decode  {} - {}", data, isDecode);
                                                 } catch (UnsupportedEncodingException e) {
                                                     logger.error("", e);
@@ -174,6 +177,9 @@ public class ExtractionService {
                             if (StringUtils.isNotEmpty(isDecode)) {
                                 try {
                                     data = MimeUtility.decodeText(data);
+                                    if (StringUtils.isNotEmpty(data)) {
+                                        data = data.replaceAll("\\r|\\n", " ");
+                                    }
                                     //logger.info(" --------decode  {} - {}", data, isDecode);
                                 } catch (UnsupportedEncodingException e) {
                                    logger.error("", e);
