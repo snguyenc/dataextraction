@@ -1,6 +1,5 @@
 package com.trues.service;
 
-import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.MimeUtility;
 import com.trues.config.model.Env;
 import com.trues.config.model.Report;
 import com.trues.util.TrueUtils;
@@ -16,6 +15,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 
+import javax.mail.internet.MimeUtility;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -56,10 +56,12 @@ public class ExtractionService {
                     String[] strings = decode.split(",");
                     for (String string : strings) {
                         if (StringUtils.isNotEmpty(string)) {
-                            decodeColumn.put(string, string);
+                            //logger.info(" --------get decode config {}  ", string.trim());
+                            decodeColumn.put(string.trim(), string.trim());
                         }
                     }
                 }
+
                 logger.info(" query type {} {}", report.getQueryType(), report.getQuery());
                 if ("SQL".equals(report.getQueryType())) {
                     Map<String, Object> namedParams = new HashMap<String, Object>(2);
@@ -96,9 +98,11 @@ public class ExtractionService {
                                         if (rs.getObject(i) != null) {
                                             String data = rs.getString(i);
                                             String isDecode = decodeColumn.get(header.get(i-1));
+                                            //logger.info(" --------decode  {} - {}", isDecode, header.get(i-1));
                                             if (StringUtils.isNotEmpty(isDecode)) {
                                                 try {
                                                     data = MimeUtility.decodeText(data);
+                                                    //logger.info(" --------decode  {} - {}", data, isDecode);
                                                 } catch (UnsupportedEncodingException e) {
                                                     logger.error("", e);
                                                 }
@@ -166,9 +170,11 @@ public class ExtractionService {
                         if (rs.getObject(i) != null) {
                             String data = rs.getString(i);
                             String isDecode = decodeColumn.get(header.get(i-1));
+                            //logger.info(" --------decode  {} - {}", isDecode, header.get(i-1));
                             if (StringUtils.isNotEmpty(isDecode)) {
                                 try {
                                     data = MimeUtility.decodeText(data);
+                                    //logger.info(" --------decode  {} - {}", data, isDecode);
                                 } catch (UnsupportedEncodingException e) {
                                    logger.error("", e);
                                 }

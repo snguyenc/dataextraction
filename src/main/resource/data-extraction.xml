@@ -25,7 +25,7 @@
                     <!-- QueryType: "SQL","Procedure" -->
                     <queryType>SQL</queryType>
                     <query>Select * from account</query>
-                    <decode>account_name,status</decode>
+                    <decode>status</decode>
                 </report>
                 <!--<report name="Chat Report">
                     <directory>D:\ICReports</directory>
